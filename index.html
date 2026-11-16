@@ -621,7 +621,49 @@ table.t{width:100%;border-collapse:separate;border-spacing:0;font-size:14px}
 .role:hover{box-shadow:inset 0 0 0 1.5px #53B1BD,0 18px 30px -22px rgba(29,106,117,.7)}
 .auth-main h1{font-size:34px}
 .auth-main h1:after{content:"";display:block;width:56px;height:3px;border-radius:3px;background:#FCC709;margin-top:12px}
-</style>
+
+/* about: static gradient cards, no click/hover color change */
+.pillar,.pillar:hover,.pillar.on{transform:none!important;box-shadow:0 24px 44px -34px rgba(29,106,117,.55),inset 0 0 0 1px #DCEFF2!important}
+.pillar .bgfill{display:none!important}
+.pillar{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 80' preserveAspectRatio='none'%3E%3Cpath d='M0 40 Q100 0 200 40 T400 40 V80 H0Z' fill='%2353B1BD' fill-opacity='.10'/%3E%3Cpath d='M0 55 Q100 20 200 55 T400 55 V80 H0Z' fill='%232A8794' fill-opacity='.10'/%3E%3C/svg%3E") bottom/100% 70px no-repeat,linear-gradient(165deg,#FFFFFF 0%,#F2FAFB 55%,#E4F4F6 100%)!important}
+.pillar h3,.pillar:hover h3,.pillar.on h3{color:var(--navy)!important}
+.pillar p,.pillar:hover p,.pillar.on p{color:var(--ink-2)!important}
+.pillar .pi,.pillar:hover .pi,.pillar.on .pi{background:linear-gradient(135deg,#2A8794,#53B1BD)!important;color:#fff!important;box-shadow:0 0 0 6px #E6F4F6!important}
+.pillar .ln,.pillar:hover .ln,.pillar.on .ln{width:56px!important}
+.pillar:after{animation:none!important;display:none}
+/* journey: automatic progress */
+.track{--p:0%}
+.track:after{content:"";position:absolute;top:56px;right:7%;height:3px;width:var(--p);background:linear-gradient(270deg,#2A8794,#53B1BD 70%,#FCC709);border-radius:3px;transition:width .9s ease}
+.stop .m{transition:background .5s,box-shadow .5s,transform .5s}
+.stop.on .m{background:linear-gradient(135deg,#1D6A75,#53B1BD)!important;transform:scale(1.08);box-shadow:0 0 0 8px #fff,0 0 0 9px #9CD3DA,0 22px 40px -18px rgba(29,106,117,.8)!important}
+.stop.on .m b,.stop.on .m small{color:#fff!important}
+.stop.end.on .m{background:#FCC709!important}
+.stop.end.on .m .ico{color:#3A2C00}
+.stop .c{transition:background .4s,color .4s}
+.stop.on .c{background:var(--teal-dd);color:#fff}
+.stop.done .m{box-shadow:inset 0 0 0 2px #2A8794,0 0 0 8px #fff,0 0 0 9px #CDE7EB!important}
+/* doors: gradient + automatic spotlight */
+.door{background:linear-gradient(170deg,#FFFFFF 0%,#F1F9FA 100%)!important;transition:background .7s,transform .6s,box-shadow .6s,color .6s}
+.door:before{content:"";position:absolute;inset:0;border-radius:24px;background:linear-gradient(150deg,#1D6A75 0%,#2A8794 55%,#53B1BD 100%);opacity:0;transition:opacity .7s;z-index:0}
+.door>*{position:relative;z-index:1}
+.door.on{transform:translateY(-8px);box-shadow:0 40px 60px -36px rgba(29,106,117,.8)!important}
+.door.on:before{opacity:1}
+.door.on h3,.door.on .row b,.door.on .ring b{color:#fff!important}
+.door.on .code{color:#FFE27A!important}
+.door.on [style*="color"],.door.on .row{color:#D2ECF0!important}
+.door.on .row{border-top-color:rgba(255,255,255,.25)}
+.door.on .ring circle:first-child{stroke:rgba(255,255,255,.22)}
+.door.on .ring circle:last-child{stroke:#FCC709}
+.ring circle{transition:stroke .6s}
+/* modules: richer cards */
+.mod{background:linear-gradient(165deg,#FFFFFF 0%,#F3FAFB 100%)!important;overflow:hidden}
+.mod:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,#53B1BD,#2A8794,#FCC709);transform:scaleX(0);transform-origin:right;transition:transform .45s}
+.mod:hover:before{transform:scaleX(1)}
+.mod .mi{background:linear-gradient(135deg,#2A8794,#53B1BD)!important;color:#fff!important;box-shadow:0 10px 20px -12px rgba(29,106,117,.8)!important}
+.mod .num{background:linear-gradient(135deg,#53B1BD,#FCC709);-webkit-background-clip:text;background-clip:text;color:transparent!important;opacity:.45}
+.mod:hover{transform:translateY(-4px)}
+@media (prefers-reduced-motion:reduce){.track:after,.stop .m,.door,.door:before{transition:none}}
+.stop{z-index:1}.track:after,.track:before{z-index:0}.stop .m{position:relative}</style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></symbol>
@@ -1145,11 +1187,14 @@ box.addEventListener('mouseover',e=>{const n=e.target.closest('.node');if(n){sto
 box.addEventListener('click',e=>{const n=e.target.closest('.node');if(n){stop();set(+n.dataset.i)}});
 $('#emb').addEventListener('mouseleave',start);start();})();
 
-// pillars auto highlight
-(function(){const ps=$$('.pillar');if(!ps.length)return;let i=0,t;const set=k=>ps.forEach((p,j)=>p.classList.toggle('on',j===k));set(0);
-const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-const go=()=>{if(reduce)return;clearInterval(t);t=setInterval(()=>{i=(i+1)%ps.length;set(i)},3200)};
-ps.forEach((p,j)=>{p.addEventListener('mouseenter',()=>{clearInterval(t);i=j;set(j)});p.addEventListener('mouseleave',go)});go();})();
+
+// journey + doors automatic motion
+(function(){const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tr=$('.track'),st=$$('.stop');let j=0;
+function stp(k){st.forEach((x,i)=>{x.classList.toggle('on',i===k);x.classList.toggle('done',i<k)});if(tr)tr.style.setProperty('--p',(k/(st.length-1)*86)+'%')}
+if(st.length){stp(0);if(!reduce)setInterval(()=>{j=(j+1)%st.length;stp(j)},1800)}
+const ds=$$('.door');let d=0;function dr(k){ds.forEach((x,i)=>x.classList.toggle('on',i===k))}
+if(ds.length){dr(0);if(!reduce)setInterval(()=>{d=(d+1)%ds.length;dr(d)},2600)}})();
 // router
 const APP={dashboard:['الرئيسية','لوحة مدير إدارة الفروع'],branches:['الفروع','الهيكل'],branch:['فرع الفرقان','الأقسام والحلقات'],students:['الطلاب','الأشخاص'],student:['ملف الطالب','الطلاب › فرع الحياة'],staff:['العاملون','الأشخاص'],targets:['المستهدفات','الأداء'],evaluation:['التقييم','الأداء'],requests:['الطلبات','القرارات'],followup:['المتابعة','المنقطعون والمتأخرون'],finance:['الرسوم والتحصيل','المالية'],reports:['التقارير','طباعة وتصدير'],teacher:['دفتر الحلقة','واجهة المعلم على الجوال'],parent:['ولي الأمر','واجهة ولي الأمر على الجوال']};
 const ROLE={dashboard:['أ. عبدالله الشهري','مدير إدارة الفروع'],branch:['أ. سالم باوزير','مدير فرع الفرقان'],evaluation:['أ. ياسر حسن','مشرف · فرع الحياة'],teacher:['أ. عمر سعيد','معلم · فرع خلود'],finance:['أ. وليد قاسم','محاسب · فرع الحياة'],parent:['محمد سالم','ولي أمر']};
